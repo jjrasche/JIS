@@ -8,6 +8,7 @@ namespace JISCalculator.Services
 {
     public interface ICalculationService
     {
-        Decimal CalculateOperations(string expression);
+        Decimal SolveExpression(string expression);
+        string IsolateSingleOperation(string expression);
     }
 }
