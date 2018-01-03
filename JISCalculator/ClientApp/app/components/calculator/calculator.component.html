@@ -1,0 +1,34 @@
+<form (ngSubmit)="submit()" novalidate class="calculator-form">
+    <input [(ngModel)]="calculationString" name="display">
+    <div style="padding:1em;" class="row">
+        <div class="col-sm-9">
+            <div class="row">
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton numberButton" (click)="handleInput('keypad', '7')" id="calcNum7">7</button>
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton numberButton" (click)="handleInput('keypad', '8')" id="calcNum8">8</button>
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton numberButton" (click)="handleInput('keypad', '9')" id="calcNum9">9</button>
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton operationButton" (click)="handleInput('keypad', '+')" id="calcOpAdd">+</button>
+            </div>
+            <div class="row">
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton numberButton" (click)="handleInput('keypad', '4')" id="calcNum4">4</button>
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton numberButton" (click)="handleInput('keypad', '5')" id="calcNum5">5</button>
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton numberButton" (click)="handleInput('keypad', '6')" id="calcNum6">6</button>
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton operationButton" (click)="handleInput('keypad', '-')" id="calcOpSub">-</button>
+            </div>
+            <div class="row">
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton numberButton" (click)="handleInput('keypad', '1')" id="calcNum1">1</button>
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton numberButton" (click)="handleInput('keypad', '2')" id="calcNum2">2</button>
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton numberButton" (click)="handleInput('keypad', '3')" id="calcNum3">3</button>
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton operationButton" (click)="handleInput('keypad', '*')" id="calcOpMult">*</button>
+            </div>
+            <div class="row">
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton numberButton" (click)="handleInput('keypad', '0')" id="calcNum0">0</button>
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton numberButton" (click)="handleInput('keypad', '.')" id="calcDecimal">.</button>
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton" (click)="submit()" id="calcOpSubmit">=</button>
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton operationButton" (click)="handleInput('keypad', '/')" id="calcOpDiv">/</button>
+            </div>
+            <div class="row">
+                <button type="button" class="col-xs-1 btn btn-default calculatorButton" (click)="handleInput('keypad', 'clear')" id="calcClear">ce</button>
+            </div>
+        </div>
+    </div>
+</form>

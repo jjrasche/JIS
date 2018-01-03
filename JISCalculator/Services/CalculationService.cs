@@ -11,17 +11,11 @@ namespace JISCalculator.Services
 {
     public class CalculationService : ICalculationService
     {
-
-
-        const string ADD = "add";
-        const string SUBTRACT = "subtract";
-        const string MULTIPLY = "multiply";
-        const string DIVIDE = "divide";
         private Regex paranthesisRegex = new Regex("[()]");
         private Regex firstOrderRegex = new Regex("\\([^()]+\\)");
-        private Regex secondOrderRegex = new Regex($"[0-9./-]+({DIVIDE}|{MULTIPLY})[0-9./-]+");
-        private Regex thirdOrderRegex = new Regex($"[0-9./-]+({ADD}|{SUBTRACT})[0-9./-]+");
-        private Regex operationsRegex = new Regex($"({ADD}|{SUBTRACT}|{MULTIPLY}|{DIVIDE})");
+        private Regex secondOrderRegex = new Regex("[0-9.]+[/\\*][/-]?[0-9.]+");
+        private Regex thirdOrderRegex = new Regex("[0-9./-]+[+/-][/-]?[0-9.]+");
+        private Regex operationsRegex = new Regex("[+/\\*/-]");
 
         public CalculationService()
         {
@@ -46,7 +40,6 @@ namespace JISCalculator.Services
             var temp = EvaluateExpression(expression);
             return Decimal.Parse(temp);
         }
-
 
         public string EvaluateExpression(string expression)
         {
@@ -79,13 +72,15 @@ namespace JISCalculator.Services
 
         public bool IsSingleOperation(string expression)
         {
-            var operations = operationsRegex.Matches(expression);
-            var arguments = operationsRegex.Split(expression).ToList();
-
-            return !HasOutsideParanthesis(expression) &&
-                    operations.Count() == 1 &&
-                    arguments.Count() == 3 &&
-                    arguments.TrueForAll(arg => !String.IsNullOrEmpty(arg));
+            try
+            {
+                var equation = new SimpleEquation(expression);
+                return (operationsRegex.IsMatch(equation.Operation));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public bool IsNumeric(string expression)
@@ -95,26 +90,25 @@ namespace JISCalculator.Services
 
         public string HandleCalculation(string expression)
         {
-            var operation = operationsRegex.Match(expression).Value;
-            var arguments = operationsRegex.Split(expression);
+            var equation = new SimpleEquation(expression);
             Decimal ret;
 
-            switch(operation)
+            switch(equation.Operation)
             {
-                case ADD:
-                    ret = Decimal.Parse(arguments[0]) + Decimal.Parse(arguments[2]);
+                case "+":
+                    ret = equation.FirstArgument + equation.SecondArgument;
                     break;
-                case SUBTRACT:
-                    ret = Decimal.Parse(arguments[0]) - Decimal.Parse(arguments[2]);
+                case "-":
+                    ret = equation.FirstArgument - equation.SecondArgument;
                     break;
-                case MULTIPLY:
-                    ret = Decimal.Parse(arguments[0]) * Decimal.Parse(arguments[2]);
+                case "*":
+                    ret = equation.FirstArgument * equation.SecondArgument;
                     break;
-                case DIVIDE:
-                    ret = Decimal.Parse(arguments[0]) / Decimal.Parse(arguments[2]);
+                case "/":
+                    ret = equation.FirstArgument / equation.SecondArgument;
                     break;
                 default:
-                    throw new InvalidOperationException($"An invalid opeation {operation} was entered.");
+                    throw new InvalidOperationException($"An invalid opeation {equation.Operation} was entered.");
             }
             return ret.ToString();
         }
